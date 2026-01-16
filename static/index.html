@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PXE Boot Manager</title>
+    <!-- Carbon Design System (Gray 100 Theme) -->
+    <link rel="stylesheet" href="https://unpkg.com/carbon-components/css/carbon-components.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="bx--header" role="banner" aria-label="PXE Boot Manager">
+        <a class="bx--header__name" href="/" title="PXE Boot Manager">
+            <span class="bx--header__name--prefix">IBM</span>&nbsp;NetBoot
+        </a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="bx--content">
+        <div class="bx--grid">
+            <div class="bx--row">
+                <div class="bx--col-lg-16">
+                    <h1 style="margin-bottom: 2rem; font-weight: 300;">ISO Management</h1>
+                </div>
+            </div>
+
+            <!-- Upload Section -->
+            <div class="bx--row" style="margin-bottom: 2rem;">
+                <div class="bx--col-lg-8">
+                    <div class="bx--form-item">
+                        <strong class="bx--file--label">Upload ISO Image</strong>
+                        <p class="bx--label-description">Max file size: Unlimited. Only .iso files supported.</p>
+                        <div class="bx--file" data-file>
+                            <label for="file-uploader" class="bx--file-browse-btn" role="button" tabindex="0">
+                                <span data-file-drop-container-text>Drag and drop files here or click to upload</span>
+                            </label>
+                            <input type="file" class="bx--file-input" id="file-uploader" data-file-uploader data-target="[data-file-container]" accept=".iso" />
+                            <div data-file-container class="bx--file-container"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bx--col-lg-8">
+                     <!-- Upload Progress Stub -->
+                    <div id="upload-status" class="status-area"></div>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="bx--row">
+                <div class="bx--col-lg-16">
+                    <section class="bx--data-table-container">
+                        <div class="bx--data-table-header">
+                            <h4 class="bx--data-table-header__title">Available Images</h4>
+                            <p class="bx--data-table-header__description">List of bootable ISOs currently on the server.</p>
+                        </div>
+                        <table class="bx--data-table bx--data-table--sort">
+                            <thead>
+                                <tr>
+                                    <th><span class="bx--table-header-label">Name</span></th>
+                                    <th><span class="bx--table-header-label">Size</span></th>
+                                    <th><span class="bx--table-header-label">Path</span></th>
+                                    <th><span class="bx--table-header-label">Actions</span></th>
+                                </tr>
+                            </thead>
+                            <tbody id="iso-table-body">
+                                <!-- Rows will be populated by JS -->
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Custom Scripts -->
+    <script src="https://unpkg.com/carbon-components/scripts/carbon-components.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

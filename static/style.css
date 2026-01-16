@@ -1,0 +1,209 @@
+/* Carbon Design System - Gray 100 Theme Overrides & Polish */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&display=swap');
+
+:root {
+    --cds-background: #161616;
+    --cds-layer-01: #262626;
+    --cds-layer-02: #393939;
+    --cds-text-01: #f4f4f4;
+    --cds-text-02: #c6c6c6;
+    --cds-interactive-01: #0f62fe;
+    --cds-interactive-01-hover: #0353e9;
+    --cds-ui-01: #262626;
+    --cds-ui-02: #393939;
+    --cds-field-01: #262626;
+    --cds-field-02: #393939;
+}
+
+body {
+    background-color: var(--cds-background);
+    color: var(--cds-text-01);
+    margin: 0;
+    font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Header */
+.bx--header {
+    background-color: var(--cds-background);
+    border-bottom: 1px solid var(--cds-ui-02);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.bx--header__name {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.bx--content {
+    margin-top: 3rem;
+    padding: 3rem 2rem;
+    max-width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
+    min-height: calc(100vh - 3rem);
+}
+
+h1 {
+    font-weight: 300;
+    font-size: 2.625rem;
+    line-height: 1.19;
+    letter-spacing: 0;
+    margin-bottom: 2rem;
+    color: var(--cds-text-01);
+}
+
+/* Forms & Inputs */
+.bx--label,
+.bx--file--label {
+    color: var(--cds-text-02);
+    font-weight: 400;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.bx--label-description {
+    color: var(--cds-text-02);
+    margin-bottom: 1rem;
+}
+
+/* File Uploader Polish */
+.bx--file {
+    margin-bottom: 0;
+}
+
+.bx--file-browse-btn {
+    background-color: var(--cds-interactive-01);
+    color: #ffffff;
+    max-width: none;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    height: auto;
+    min-height: 48px;
+    transition: background-color 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+}
+
+.bx--file-browse-btn:hover {
+    background-color: var(--cds-interactive-01-hover);
+    text-decoration: none;
+}
+
+/* Data Table Polish */
+.bx--data-table-container {
+    padding-top: 1rem;
+    background-color: var(--cds-layer-01);
+    width: 100%;
+    overflow-x: auto;
+}
+
+.bx--data-table-header {
+    background-color: var(--cds-layer-01);
+    padding: 0 1rem 1rem 1rem;
+}
+
+.bx--data-table-header__title {
+    color: var(--cds-text-01);
+}
+
+.bx--data-table-header__description {
+    color: var(--cds-text-02);
+}
+
+.bx--data-table {
+    background-color: var(--cds-layer-01);
+    width: 100%;
+}
+
+.bx--data-table thead {
+    background-color: var(--cds-layer-02);
+}
+
+.bx--data-table th {
+    background-color: var(--cds-layer-02);
+    color: var(--cds-text-01);
+    font-weight: 600;
+    border-top: none;
+    border-bottom: 1px solid var(--cds-ui-02);
+    padding: 1rem;
+}
+
+.bx--data-table tbody tr {
+    background-color: var(--cds-layer-01);
+    border-bottom: 1px solid var(--cds-ui-02);
+    transition: background-color 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+}
+
+.bx--data-table tbody tr:hover {
+    background-color: var(--cds-layer-02);
+}
+
+.bx--data-table td {
+    color: var(--cds-text-02);
+    /* Secondary text for body usually better */
+    background-color: inherit;
+    border-bottom: 1px solid var(--cds-ui-02);
+    padding: 1rem;
+    vertical-align: middle;
+}
+
+.bx--data-table tbody tr td:first-child {
+    color: var(--cds-text-01);
+    /* Primary text for Name */
+    font-weight: 600;
+}
+
+/* Actions */
+.bx--btn--icon-only {
+    min-height: 2rem;
+    width: 2rem;
+    padding: 0;
+}
+
+/* Loading & Notifications */
+.status-area {
+    margin-top: 2rem;
+    /* Align with input */
+    min-height: 48px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.bx--inline-loading {
+    color: var(--cds-text-01);
+}
+
+.bx--inline-loading__text {
+    color: var(--cds-text-02);
+}
+
+.bx--inline-notification {
+    max-width: 100%;
+    background-color: var(--cds-layer-02);
+    border: 1px solid transparent;
+    /* default */
+    border-left: 3px solid;
+}
+
+.bx--inline-notification--success {
+    border-color: #24a148;
+    background-color: #161616;
+}
+
+.bx--inline-notification--error {
+    border-color: #da1e28;
+    background-color: #161616;
+}
+
+.bx--inline-notification__title {
+    color: var(--cds-text-01);
+}
+
+.bx--inline-notification__subtitle {
+    color: var(--cds-text-02);
+}

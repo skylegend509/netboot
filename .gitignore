@@ -1,0 +1,18 @@
+# Binaries
+netboot
+netboot.exe
+
+# Application Data
+uploads/
+isos/
+
+# OS Specific
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo

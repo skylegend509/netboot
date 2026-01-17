@@ -1,0 +1,9 @@
+isos/
+uploads/
+netboot
+netboot.exe
+.git
+.gitignore
+Dockerfile
+README.md
+CONTRIBUTING.md

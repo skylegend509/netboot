@@ -28,8 +28,7 @@ item exit Exit
 choose --default exit --timeout 30000 target && goto ${target}
 
 {{range $i, $iso := .ISOs}}:iso{{$i}}
-kernel http://${next-server}{{$.Port}}/isos/{{$iso.Path}}
-boot
+sanboot http://${next-server}{{$.Port}}/isos/{{$iso.Path}}
 
 {{end}}
 :shell

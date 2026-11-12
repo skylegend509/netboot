@@ -27,7 +27,7 @@
 
 1.  Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/netboot.git
+    git clone https://github.com/skylegend509/netboot.git
     cd netboot
     ```
 
@@ -59,6 +59,15 @@ docker run -p 8080:8080 -v $(pwd)/isos:/data/isos netboot
 | `PORT` | Server listening port | `:8080` |
 | `ISO_DIR` | Directory to store ISO files | `./isos` |
 | `UPLOAD_DIR` | Directory to temporary upload files | `./uploads` |
+| `ADMIN_TOKEN` | Required Bearer token for ISO uploads and deletion | *(required for write operations)* |
+
+Set a strong `ADMIN_TOKEN` before starting the server. The web interface asks for
+the token when you upload or delete an image and keeps it in the browser session.
+Requests to `POST /api/upload` and `DELETE /api/delete` must include
+`Authorization: Bearer <ADMIN_TOKEN>`. If the token is unset, these write
+operations are denied. Listing images and fetching the iPXE script remain public.
+
+Uploads are limited to 10 GiB. Requests above this limit receive HTTP `413`.
 
 ## Usage
 
@@ -66,6 +75,7 @@ docker run -p 8080:8080 -v $(pwd)/isos:/data/isos netboot
 2.  Drag and drop an ISO file (e.g., `ubuntu.iso`, `proxmox.iso`) into the uploader.
 3.  Configure your client machine to boot via network (PXE) pointing to this server.
 4.  The client will load the iPXE script from `http://<server-ip>:8080/boot.ipxe`.
+    The generated menu boots selected images using iPXE `sanboot` over HTTP.
 
 ## License
 

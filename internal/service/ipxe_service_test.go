@@ -28,8 +28,8 @@ func TestIPXEService_GenerateScript(t *testing.T) {
 		"#!ipxe",
 		"item iso0 ubuntu.iso",
 		"item iso1 arch.iso",
-		"kernel http://${next-server}:9090/isos/ubuntu.iso",
-		"kernel http://${next-server}:9090/isos/arch.iso",
+		"sanboot http://${next-server}:9090/isos/ubuntu.iso",
+		"sanboot http://${next-server}:9090/isos/arch.iso",
 	}
 
 	for _, s := range expectedStrings {

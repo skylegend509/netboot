@@ -21,8 +21,9 @@ func prepareTestEnv(t *testing.T) (*Handler, string) {
 	}
 
 	cfg := &config.Config{
-		ISODir: tmpDir,
-		Port:   ":8080",
+		ISODir:     tmpDir,
+		Port:       ":8080",
+		AdminToken: "test-token",
 	}
 	isoSvc := service.NewISOService(cfg)
 	ipxeSvc := service.NewIPXEService(cfg)
@@ -71,6 +72,7 @@ func TestHandleUpload(t *testing.T) {
 
 	req := httptest.NewRequest(http.MethodPost, "/api/upload", body)
 	req.Header.Set("Content-Type", writer.FormDataContentType())
+	req.Header.Set("Authorization", "Bearer test-token")
 	w := httptest.NewRecorder()
 
 	h.HandleUpload(w, req)
@@ -96,6 +98,7 @@ func TestHandleDelete(t *testing.T) {
 	h.isoService.Sync()
 
 	req := httptest.NewRequest(http.MethodDelete, "/api/delete?name=delete_me.iso", nil)
+	req.Header.Set("Authorization", "Bearer test-token")
 	w := httptest.NewRecorder()
 
 	h.HandleDelete(w, req)

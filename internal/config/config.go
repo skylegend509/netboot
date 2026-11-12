@@ -6,16 +6,20 @@ import (
 )
 
 type Config struct {
-	Port      string
-	ISODir    string
-	UploadDir string
+	Port           string
+	ISODir         string
+	UploadDir      string
+	AdminToken     string
+	MaxUploadBytes int64
 }
 
 func Load() *Config {
 	return &Config{
-		Port:      getEnv("PORT", ":8080"),
-		ISODir:    getEnv("ISO_DIR", "./isos"),
-		UploadDir: getEnv("UPLOAD_DIR", "./uploads"),
+		Port:           getEnv("PORT", ":8080"),
+		ISODir:         getEnv("ISO_DIR", "./isos"),
+		UploadDir:      getEnv("UPLOAD_DIR", "./uploads"),
+		AdminToken:     getEnv("ADMIN_TOKEN", ""),
+		MaxUploadBytes: 10 << 30,
 	}
 }
 

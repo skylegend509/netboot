@@ -27,18 +27,13 @@ function renderTable(isos) {
 
     isos.forEach(iso => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${iso.name}</td>
-            <td>${formatSize(iso.size)}</td>
-            <td>${iso.path}</td>
-            <td>
-                <button class="bx--btn bx--btn--danger bx--btn--sm bx--btn--icon-only" 
-                        onclick="deleteISO('${iso.name}')" 
-                        aria-label="Delete">
-                    <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="16" height="16" viewBox="0 0 32 32" aria-hidden="true"><path d="M12 12H14V24H12zM18 12H20V24H18z"></path><path d="M4 6V8H6V28a2 2 0 002 2H24a2 2 0 002-2V8h2V6zM8 28V8H24V28zM12 2H20V4H12z"></path></svg>
-                </button>
-            </td>
-        `;
+        for (const value of [iso.name, formatSize(iso.size), iso.path]) {
+            const cell = document.createElement('td'); cell.textContent = value; tr.appendChild(cell);
+        }
+        const actions = document.createElement('td');
+        const button = document.createElement('button');
+        button.className = 'bx--btn bx--btn--danger bx--btn--sm'; button.textContent = 'Delete'; button.setAttribute('aria-label', `Delete ${iso.name}`);
+        button.addEventListener('click', () => deleteISO(iso.name)); actions.appendChild(button); tr.appendChild(actions);
         tbody.appendChild(tr);
     });
 }
@@ -58,14 +53,15 @@ async function handleUpload(event) {
     if (!file) return;
 
     const statusArea = document.getElementById('upload-status');
-    statusArea.innerHTML = `<div class="bx--inline-loading" role="alert" aria-live="assertive">
+    statusArea.textContent = `Uploading ${file.name}...`;
+    /*<div class="bx--inline-loading" role="alert" aria-live="assertive">
         <div class="bx--inline-loading__animation">
             <div data-loading class="bx--loading bx--loading--small">
                 <svg class="bx--loading__svg" viewBox="-75 -75 150 150"><circle class="bx--loading__stroke" cx="0" cy="0" r="37.5" /></svg>
             </div>
         </div>
         <p class="bx--inline-loading__text">Uploading ${file.name}...</p>
-    </div>`;
+    </div>*/
 
     const formData = new FormData();
     formData.append('file', file);
@@ -73,28 +69,31 @@ async function handleUpload(event) {
     try {
         const response = await fetch('/api/upload', {
             method: 'POST',
-            body: formData
+            body: formData,
+            headers: { Authorization: `Bearer ${adminToken()}` }
         });
 
         if (response.ok) {
-            statusArea.innerHTML = `<div class="bx--inline-notification bx--inline-notification--success" role="alert">
+            statusArea.textContent = `${file.name} has been uploaded successfully.`;
+            /*statusArea.innerHTML = `<div class="bx--inline-notification bx--inline-notification--success" role="alert">
                 <div class="bx--inline-notification__details">
                     <p class="bx--inline-notification__title">Upload Complete</p>
                     <p class="bx--inline-notification__subtitle">${file.name} has been uploaded successfully.</p>
                 </div>
-            </div>`;
+            </div>*/
             loadISOs(); // Refresh list
         } else {
             const errText = await response.text();
             throw new Error(errText);
         }
     } catch (error) {
-        statusArea.innerHTML = `<div class="bx--inline-notification bx--inline-notification--error" role="alert">
+            statusArea.textContent = `Upload failed: ${error.message}`;
+            /*statusArea.innerHTML = `<div class="bx--inline-notification bx--inline-notification--error" role="alert">
             <div class="bx--inline-notification__details">
                 <p class="bx--inline-notification__title">Upload Failed</p>
                 <p class="bx--inline-notification__subtitle">${error.message}</p>
             </div>
-        </div>`;
+            </div>*/
     }
 
     // Reset input
@@ -106,7 +105,7 @@ async function deleteISO(name) {
 
     try {
         const response = await fetch(`/api/delete?name=${encodeURIComponent(name)}`, {
-            method: 'DELETE'
+            method: 'DELETE', headers: { Authorization: `Bearer ${adminToken()}` }
         });
 
         if (response.ok) {
@@ -117,6 +116,12 @@ async function deleteISO(name) {
     } catch (error) {
         console.error('Error deleting ISO:', error);
     }
+}
+
+function adminToken() {
+    let token = sessionStorage.getItem('adminToken');
+    if (!token) { token = prompt('Admin token'); if (token) sessionStorage.setItem('adminToken', token); }
+    return token || '';
 }
 
 function showNotification(type, message) {

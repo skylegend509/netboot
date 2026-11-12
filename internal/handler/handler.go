@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"crypto/subtle"
 	"encoding/json"
 	"net/http"
 	"netboot/internal/config"
@@ -38,8 +39,23 @@ func (h *Handler) HandleUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Limit upload size to 10GB for example, or leave unlimited
-	r.ParseMultipartForm(10 << 30) // 10 GB
+	if !h.authorized(r) {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+	limit := h.cfg.MaxUploadBytes
+	if limit <= 0 {
+		limit = 10 << 30
+	}
+	r.Body = http.MaxBytesReader(w, r.Body, limit)
+	if err := r.ParseMultipartForm(32 << 20); err != nil {
+		if _, ok := err.(*http.MaxBytesError); ok {
+			http.Error(w, "Upload too large", http.StatusRequestEntityTooLarge)
+		} else {
+			http.Error(w, "Invalid multipart upload", http.StatusBadRequest)
+		}
+		return
+	}
 
 	file, header, err := r.FormFile("file")
 	if err != nil {
@@ -67,6 +83,10 @@ func (h *Handler) HandleDelete(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
+	if !h.authorized(r) {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	name := r.URL.Query().Get("name")
 	if name == "" {
@@ -80,6 +100,17 @@ func (h *Handler) HandleDelete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+}
+
+func (h *Handler) authorized(r *http.Request) bool {
+	if h.cfg.AdminToken == "" {
+		return false
+	}
+	got := r.Header.Get("Authorization")
+	if strings.HasPrefix(got, "Bearer ") {
+		got = strings.TrimPrefix(got, "Bearer ")
+	}
+	return subtle.ConstantTimeCompare([]byte(got), []byte(h.cfg.AdminToken)) == 1
 }
 
 func (h *Handler) HandleIPXE(w http.ResponseWriter, r *http.Request) {
